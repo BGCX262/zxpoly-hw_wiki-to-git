@@ -2,4 +2,18 @@
 
 = Introduction =
 
-The Idea of ZX-Poly was born in 1994 when ZX-Spectrum was still popular in former USSR but unfortunately after "iron courtain" down, PC computers started to force out speccy from russian computer market and the idea was born too later to get hardware implementation.
+The Idea of ZX-Poly was born in 1994 when ZX-Spectrum was still popular in former USSR but unfortunately after "iron curtain" down, PC computers started to force out speccy from Russian computer market and the idea was born too late to get hardware implementation.
+In opposite to other attempts to resolve colour issue of Speccy, ZX-Poly doesn't have any magic under the hood and the main idea is the use of one CPU per a colour component, it allows to save work speed without use of any special hardware video accelerators.
+
+= Technical characteristics =
+ * *CPU:* 4xZ80 (3.5 Mhz)
+ * *RAM:* 512 kB (128 KB per CPU module)
+ * *ROM:* Basic 48, Basic 128, TR-DOS
+
+=Ports=
+==The Main ZX-Poly port #3D00==
+==Local ZX-Poly module registers==
+===Register R0===
+===Register R1===
+===Register R2===
+===Register R3===
