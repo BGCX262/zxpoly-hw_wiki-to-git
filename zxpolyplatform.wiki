@@ -23,7 +23,7 @@ For Write
 ==The Main ZX-Poly port (#3D00)==
 ===For Write===
  * *bit 0* if it is reset, then /WAIT will be active for CPU1-CPU3 modules. After reset the bit is 0.
- * *bit 1* if set the register then it will initiate /RESET signal for all CPU(0-3) with reading of first 4 bytes from inside ZX-Poly registers.
+ * *bit 1* if set the register then it will initiate /RESET signal for all CPU(0-3) with reading of first 3 bytes from inside ZX-Poly registers R1-R3.
  * *bit 2,3,4* the bits allow to set current video mode
   * 0 - Standard ZX Video mode, CPU0 memory as source
   * 1 - Standard ZX Video mode, CPU1 memory as source
@@ -34,7 +34,7 @@ For Write
     * Green from CPU1 memory
     * Blue from CPU2 memory
     * Bright from CPU3 memory
-  * 5 - ZX-Poly Hi-Res mode, 512x384, pixels colorized by their attributes are placed in chess order on screen
+  * 5 - ZX-Poly Hi-Res mode, 512x384, pixels colourized by their attributes are placed in chess order on screen
   * 6,7 - reserved and work as 0
  * *bit 5,6* the bits work only for CPU0, they define index of CPU which memory will be mapped for CPU0 as IO area, any CPU0 writing operation to the mapped memory will be generating /NMI for mapped CPU and any reading operation will be generating /INT for mapped CPU (but #7FFD and #3D00 are not excluded in the mode and can't be used as mapped ports), after reset the value of the bits 00, the mechanism is turned off.
  * *bit 7* lock the port and turn off ZX-Poly interruption features  
@@ -46,9 +46,49 @@ For Write
  * *bit 5,6,7* memory offset in 64kB pages for the module memory in common memory heap
   
 ==Local ZX-Poly module registers==
+Each ZX-Poly module has own ports which can be written only by CPU placed on the module or CPU with higher priority (CPU0->CPU1->CPU2->CPU3)
+The Formula to calculate of register port address is *(module_index<<12)|(register_index<<8)|#FF*   
 
-===Register R0===
+===Register R0 (#X0FF)===
+For Write
+ * *bit 0,1,2* define the offset of module memory in global memory heap in 64kB pages, just after reset the value of the bits is *module_index<<1*
+ * *bit 3* disable memory write for the module CPU
+ * *bit 4* disable IO port write for the module CPU
+ * *bit 5* make local /RESET for the module CPU, first bytes after the reset will be read from inside module registers
+ * *bit 6* send /NMI to the module CPU
+ * *bit 7* send /INT to the module CPU
+For Read
+ * *bit 0* shows that HALT is active for module CPU
+ * *bit 1* shows that /WAIT is active for module CPU
+ * *bit 2,3,4,5,6,7* contain packed address which was placed on bus by module CPU in M1 cycle
+   * bit 2 = ADDR1
+   * bit 3 = ADDR2
+   * bit 4 = ADDR8
+   * bit 5 = ADDR12
+   * bit 6 = ADDR14
+   * bit 7 = ADDR15
 
-===Register R1===
-===Register R2===
-===Register R3===
+===Register R1 (#X1FF)===
+For Write
+ * *bit 0,1,2,3* each bit shows CPU which must be notified if the CPU module meet HALT command
+ * *bit 4* disable NMI for the module CPU (just off the CPU pin)
+ * *bit 5* (actual only for CPU0) disable 7FFD port visibility during active IO mapping process
+ * *bit 6* if the bit is set then /INT will be sent to marked CPUs if HALT command is meet
+ * *bit 7* if the bit is set then /NMI will be sent to marked CPUs if HALT command is meet  
+For Read
+ *The First command byte after local RESET*
+ 
+===Register R2 (#X2FF)===
+For Write
+ *The Lower byte for stop address mechanism.*
+For Read
+ *The Second command byte after local RESET*
+
+===Register R3 (#X3FF)===
+For Write
+ *The High byte for stop address mechanism.*
+For Read
+ *The Third command byte after local RESET*
+
+==Stop-address==
+If #3D00 is not locked and the module is not in processing of local reset then system check every M1 cycle, the address placed by module CPU on the bus with the address written as *(R3<<8)|R2* and if they are not zero and equal then the module CPU will be stopped by /WAIT signal. Together with local reset the mechanism allows to make some pseudo-synchronization of CPUs in system. 
