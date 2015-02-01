@@ -33,7 +33,9 @@ For Write
     * Red from CPU0 memory
     * Green from CPU1 memory
     * Blue from CPU2 memory
-    * Bright from CPU3 memory  
+    * Bright from CPU3 memory
+  * 5 - ZX-Poly Hi-Res mode, 512x384, pixels colorized by their attributes are placed in chess order on screen
+  * 6,7 - reserved and work as 0
  * *bit 5,6* the bits work only for CPU0, they define index of CPU which memory will be mapped for CPU0 as IO area, any CPU0 writing operation to the mapped memory will be generating /NMI for mapped CPU and any reading operation will be generating /INT for mapped CPU (but #7FFD and #3D00 are not excluded in the mode and can't be used as mapped ports), after reset the value of the bits 00, the mechanism is turned off.
  * *bit 7* lock the port and turn off ZX-Poly interruption features  
 ===For Read===
