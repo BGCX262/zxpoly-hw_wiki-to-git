@@ -18,17 +18,35 @@ For Write
  * *bit 3* the current RAM page as video memory (0 - RAM 5, 1 - RAM 7)
  * *bit 4* the current ROM (0 - Basic 128, 1 - Basic 48)
  * *bit 5* lock the port to prevent it from changes
- * *bit 6* _flag to replace ROM by the RAM 0 page, save into the area allowed only if #3D00 is not locked.
+ * *bit 6* _flag to replace ROM by the RAM 0 page, save into the area allowed only if #3D00 is not locked_
  * *bit 7* _flag to disabe INT for CPU0, it works only if #3D00 and #7FFD are not locked_
 ==The Main ZX-Poly port (#3D00)==
-For Write
+===For Write===
  * *bit 0* if it is reset, then /WAIT will be active for CPU1-CPU3 modules. After reset the bit is 0.
  * *bit 1* if set the register then it will initiate /RESET signal for all CPU(0-3) with reading of first 4 bytes from inside ZX-Poly registers.
  * *bit 2,3,4* the bits allow to set current video mode
+  * 0 - Standard ZX Video mode, CPU0 memory as source
+  * 1 - Standard ZX Video mode, CPU1 memory as source
+  * 2 - Standard ZX Video mode, CPU2 memory as source
+  * 3 - Standard ZX Video mode, CPU3 memory as source
+  * 4 - ZX-Poly video mode, 256x192, 16 colors per pixel
+    * Red from CPU0 memory
+    * Green from CPU1 memory
+    * Blue from CPU2 memory
+    * Bright from CPU3 memory  
  * *bit 5,6* the bits work only for CPU0, they define index of CPU which memory will be mapped for CPU0 as IO area, any CPU0 writing operation to the mapped memory will be generating /NMI for mapped CPU and any reading operation will be generating /INT for mapped CPU (but #7FFD and #3D00 are not excluded in the mode and can't be used as mapped ports), after reset the value of the bits 00, the mechanism is turned off.
  * *bit 7* lock the port and turn off ZX-Poly interruption features  
+===For Read===
+ * *bit 0,1* the bits contain index of module (0,1,2,3)
+ * *bit 2* it shows that IO writing operations have been disabled for the module CPU
+ * *bit 3* it shows that memory writing operations have been disabled for the module CPU
+ * *bit 4* it shows that memory area of the module is mapped as IO for CPU0 module
+ * *bit 5,6,7* memory offset in 64kB pages for the module memory in common memory heap
+  
 ==Local ZX-Poly module registers==
+
 ===Register R0===
+
 ===Register R1===
 ===Register R2===
 ===Register R3===
