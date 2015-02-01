@@ -1,13 +1,5 @@
-#summary One-sentence summary of this page.
+#summary Description of ZX-Poly platform
 
 = Introduction =
 
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+The Idea of ZX-Poly was born in 1994 when ZX-Spectrum was still popular in former USSR but unfortunately after "iron courtain" down, PC computers started to force out speccy from russian computer market and the idea was born too later to get hardware implementation.
