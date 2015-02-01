@@ -49,7 +49,7 @@ For Write
 Each ZX-Poly module has own ports which can be written only by CPU placed on the module or CPU with higher priority (CPU0->CPU1->CPU2->CPU3)
 The Formula to calculate of register port address is *(module_index<<12)|(register_index<<8)|#FF*   
 
-===Register R0 (#X0FF)===
+===Register ZX-PolyR0 (#X0FF)===
 For Write
  * *bit 0,1,2* define the offset of module memory in global memory heap in 64kB pages, just after reset the value of the bits is *module_index<<1*
  * *bit 3* disable memory write for the module CPU
@@ -68,7 +68,7 @@ For Read
    * bit 6 = ADDR14
    * bit 7 = ADDR15
 
-===Register R1 (#X1FF)===
+===Register ZX-PolyR1 (#X1FF)===
 For Write
  * *bit 0,1,2,3* each bit shows CPU which must be notified if the CPU module meet HALT command
  * *bit 4* disable NMI for the module CPU (just off the CPU pin)
@@ -78,13 +78,13 @@ For Write
 For Read
  *The First command byte after local RESET*
  
-===Register R2 (#X2FF)===
+===Register ZX-PolyR2 (#X2FF)===
 For Write
  *The Lower byte for stop address mechanism.*
 For Read
  *The Second command byte after local RESET*
 
-===Register R3 (#X3FF)===
+===Register ZX-PolyR3 (#X3FF)===
 For Write
  *The High byte for stop address mechanism.*
 For Read
