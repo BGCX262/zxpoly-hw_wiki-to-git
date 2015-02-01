@@ -11,7 +11,22 @@ In opposite to other attempts to resolve colour issue of Speccy, ZX-Poly doesn't
  * *ROM:* Basic 48, Basic 128, TR-DOS
 
 =Ports=
-==The Main ZX-Poly port #3D00==
+==Modified ZX128 port (#7FFD)==
+Each CPU module has its own ZX128 port
+For Write
+ * *bit 0,1,2* the RAM page index to be placed in 0xC000-0xFFFF
+ * *bit 3* the current RAM page as video memory (0 - RAM 5, 1 - RAM 7)
+ * *bit 4* the current ROM (0 - Basic 128, 1 - Basic 48)
+ * *bit 5* lock the port to prevent it from changes
+ * *bit 6* _flag to replace ROM by the RAM 0 page, save into the area allowed only if #3D00 is not locked.
+ * *bit 7* _flag to disabe INT for CPU0, it works only if #3D00 and #7FFD are not locked_
+==The Main ZX-Poly port (#3D00)==
+For Write
+ * *bit 0* if it is reset, then /WAIT will be active for CPU1-CPU3 modules. After reset the bit is 0.
+ * *bit 1* if set the register then it will initiate /RESET signal for all CPU(0-3) with reading of first 4 bytes from inside ZX-Poly registers.
+ * *bit 2,3,4* the bits allow to set current video mode
+ * *bit 5,6* the bits work only for CPU0, they define index of CPU which memory will be mapped for CPU0 as IO area, any CPU0 writing operation to the mapped memory will be generating /NMI for mapped CPU and any reading operation will be generating /INT for mapped CPU (but #7FFD and #3D00 are not excluded in the mode and can't be used as mapped ports), after reset the value of the bits 00, the mechanism is turned off.
+ * *bit 7* lock the port and turn off ZX-Poly interruption features  
 ==Local ZX-Poly module registers==
 ===Register R0===
 ===Register R1===
